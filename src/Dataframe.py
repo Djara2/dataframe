@@ -42,7 +42,7 @@ class Dataframe:
         # if the provided column does not meet length of existing column,
         # then have all subsequent missing values be set to None
         if values_length < headers_length:
-            values += ([""] * (headers_length - values_length))
+            values += (["NA"] * (headers_length - values_length))
 
         field_index = self.headers.index(header)
         for x in range(0, len(self.rows)):
@@ -66,14 +66,14 @@ class Dataframe:
             print(f"Provided row truncated to first {required_length} values, because original length was too long ({provided_length} values)")
 
         if provided_length < required_length:
-            values += ([""] * (required_length - provided_length))
+            values += (["NA"] * (required_length - provided_length))
 
         self.rows[row] = values
 
     def fill_empty(row: list, required_length: int) -> list:
         provided_length = len(row)
         difference = required_length - provided_length
-        new_row = row + ([""] * difference)
+        new_row = row + (["NA"] * difference)
         return(new_row)
 
     def add_row(self, values: list) -> None:
@@ -98,7 +98,7 @@ class Dataframe:
 
         # account for length disparity in rows
         for x in range(len(self.rows)):
-            self.rows[x].append("")
+            self.rows[x].append("NA")
 
     def __add__(self, value: list):
         if type(value) != list:
@@ -216,8 +216,8 @@ class Dataframe:
 
         ┃ table ┃ name ┃ age ┃
         ┡━━━━━━━╇━━━━━━╇━━━━━┩
-        │ dave  │ 21   │     │
-        │ Sam   │ 21   │     │
+        │ │ │     │
+        │ │ │     │
         └───────┴──────┴─────┘
         """
         widths = [self.__get_column_width(column) for column in self.headers]

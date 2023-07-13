@@ -1,0 +1,5 @@
+# Ignore output CSV
+*.csv
+
+# Ignore pycache
+__pycache__/
