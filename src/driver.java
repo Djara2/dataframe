@@ -64,5 +64,13 @@ public class driver
 			}
 			System.out.println();
 		}
+
+		// test: get column widths
+		System.out.println("\nTEST: GET COLUMN WIDTHS");
+		int[] widths = df.getColumnWidths();
+		for(int width : widths)
+		{
+			System.out.println(width);
+		}
 	}
 }

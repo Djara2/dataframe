@@ -87,4 +87,42 @@ public class Dataframe
 		Dataframe newDataframe = new Dataframe(newHeaders, newMap);
 		return newDataframe;
 	}
+	//----------------------------------------------------
+	
+	// Printing the dataframe
+	public int getColumnWidth(String columnName)
+	{
+		if(!(headers.contains(columnName)))
+		{
+			return -1;
+		}
+
+		ArrayList<String> column = map.get(columnName);
+		int columnSize = column.size() + 1; // plus one to account for header 
+		int[] lengths = new int[columnSize];
+		int width = -1;
+		for(int i = 0; i < columnSize - 1; i++)
+		{
+			lengths[i] = column.get(i).length();
+			if(lengths[i] > width) width = lengths[i];
+		}
+
+		int headerLength = columnName.length();
+		lengths[columnSize-1] = headerLength;
+		if(headerLength > width) width = headerLength;
+
+		return width;
+	}
+
+	public int[] getColumnWidths()
+	{
+		int cardinality = headers.size();
+		int[] widths = new int[cardinality];
+		for(int i = 0; i < cardinality; i++)
+		{
+			String header = headers.get(i);
+			widths[i] = getColumnWidth(header);
+		}
+		return widths;
+	}
 } 
