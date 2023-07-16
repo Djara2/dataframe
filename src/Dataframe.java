@@ -88,7 +88,61 @@ public class Dataframe
 		return newDataframe;
 	}
 	//----------------------------------------------------
-	
+
+	// Adding/modifying rows and columns
+	public void renameColumn(String original, String newName)
+	{
+		int originalIndex = headers.indexOf(original);
+		headers.set(originalIndex, newName);
+		map.put(newName, map.get(original));
+		map.remove(original);
+	}
+
+	public void addColumn(String columnName)
+	{
+		headers.add(columnName);
+		ArrayList<String> newColumnValues = new ArrayList<String>();
+		for(int i = 0; i < map.get(headers.get(0)).size(); i++)
+		{
+			newColumnValues.add("NA");
+		}
+		map.put(columnName, newColumnValues);
+	}
+
+	public void addRow(ArrayList<String> row)
+	{
+		int rowSize = row.size();
+		int requiredSize = headers.size();
+		int difference = requiredSize - rowSize;
+		// case: row too small
+		if(rowSize < requiredSize)
+		{
+			System.out.println("Row size (" + rowSize + ") is smaller than expected size (" + requiredSize + "). Missing values will be replaced with \"NA\"");
+			for(int i = 0; i < difference; i++)
+			{
+				row.add("NA");
+			}
+		}
+
+		// case: row too big
+		if(rowSize > requiredSize)
+		{
+			System.out.println("Row size (" + rowSize + ") is larger than expected size (" + requiredSize + "). New row will be truncated.");
+			for(int i = rowSize-1; i > requiredSize-1; i--)
+			{
+				row.remove(i);
+			}
+		}
+
+		for(int i = 0; i < requiredSize; i++)
+		{
+			String header = headers.get(i);
+			String element = row.get(i);
+			map.get(header).add(element);
+		}
+		size++;
+	}
+
 	// Printing the dataframe
 	public int getColumnWidth(String columnName)
 	{
@@ -124,5 +178,56 @@ public class Dataframe
 			widths[i] = getColumnWidth(header);
 		}
 		return widths;
+	}
+
+	public static String multiplyString(String string, int times)
+	{
+		if(times == 0)
+		{
+			return "";
+		}
+
+		String result = string;
+		for(int i = 0; i < times-1; i++)
+		{
+			result = result + string;
+		}
+		return result;
+	}
+
+	public String toString()
+	{
+		String representation = "";
+		int[] widths = getColumnWidths();
+		int headersSize = headers.size();
+		// headers first
+		for(int i = 0; i < headersSize; i++)
+		{
+			String item = headers.get(i);
+			int itemLength = item.length();
+			int width = widths[i];
+			int difference = width - itemLength;
+			String whiteSpace = multiplyString(" ", difference);
+			representation = representation + item + whiteSpace + " | ";
+		}
+		representation = representation + "\n";
+
+		// rows
+		for(int i = 0; i < size; i++)
+		{
+			for(int j = 0; j < headersSize; j++)
+			{
+				String header = headers.get(j);
+				ArrayList<String> row = map.get(header);
+				String item = row.get(i);
+				int width = widths[j];
+				int itemLength = item.length();
+				int difference = width - itemLength;
+				String whiteSpace = multiplyString(" ", difference);
+				representation = representation + item + whiteSpace + " | ";
+			}
+			representation = representation + "\n";
+		}
+		return representation;
 	}
 } 

@@ -72,5 +72,17 @@ public class driver
 		{
 			System.out.println(width);
 		}
+
+		// test: add column
+		System.out.println("\nTEST: ADD COLUMN");
+		df.addColumn("Is Vegetarian");
+	
+		// test: rename column	
+		System.out.println("\nTEST: RENAME COLUMN");
+		df.renameColumn("Is Vegetarian", "Is Vegan");
+
+		// test: print dataframe
+		String dfString = df.toString();
+		System.out.println(dfString);
 	}
 }
